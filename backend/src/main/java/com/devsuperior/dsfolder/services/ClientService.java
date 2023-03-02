@@ -1,11 +1,12 @@
 package com.devsuperior.dsfolder.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devsuperior.dsfolder.dto.ClientDTO;
 import com.devsuperior.dsfolder.entities.Client;
 import com.devsuperior.dsfolder.repositories.ClientRepository;
 
@@ -16,7 +17,8 @@ public class ClientService {
 	private ClientRepository repository;
 	
 	@Transactional(readOnly = true)
-	public List<Client> findAll() {
-		return repository.findAll();
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Client> list = repository.findAll(pageRequest);
+		return list.map(x -> new ClientDTO(x));
 	}
 }
